@@ -34,7 +34,8 @@ class Image(models.Model):
             "id": self.id,
             "title": self.title,
             "content": self.content,
-            "user": self.user.serialize(),
+            "image": self.image.decode(),
+            "user": self.user.serialize()
         }
 
     def __str__(self):
