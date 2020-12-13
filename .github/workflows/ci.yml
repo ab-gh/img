@@ -1,0 +1,13 @@
+name: Django Tests
+on: push
+
+jobs:
+  compose_and_test:
+    name: Docker Compose and Django Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker compose with Unit Tests
+      run: |
+        export DB_PASSWORD=${{ secrets.DB_PASSWORD }} 
+        docker-compose run web python3 manage.py test
