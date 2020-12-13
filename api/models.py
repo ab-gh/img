@@ -10,6 +10,12 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username
+        }
+
 class Image(models.Model):
     """
     An image
@@ -18,6 +24,17 @@ class Image(models.Model):
     content = models.CharField(max_length=280)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
     image = models.BinaryField(blank=True)
+
+    class Meta:
+        ordering = ['-timestamp',]
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "user": self.user,
+        }
 
     def __str__(self):
         return f"{self.title}"
