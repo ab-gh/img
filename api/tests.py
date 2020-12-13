@@ -9,7 +9,6 @@ class ApiTestCase(TestCase, Client):
     """
     Unit tests for API responses
     """
-
     def setUp(self):
         ## Test strings
         self.test = {}
@@ -27,6 +26,9 @@ class ApiTestCase(TestCase, Client):
         self.test['image_id'] = image.id
 
     def test_api(self):
+        """
+        Test HTTP responses for API
+        """
         c = Client()
 
         ## /api/image response codes
@@ -41,6 +43,9 @@ class ApiTestCase(TestCase, Client):
         
 
     def test_image(self):
+        """
+        Test Image model
+        """
         c = Client()
 
         ## get image
