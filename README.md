@@ -14,8 +14,10 @@ The `api` app serves as the RESTful API, at `/api` with the following routes:
 
 **`/image/<id>`**
 - returns the image and metadata for the given image ID
+
 **`/tag/<id>` / `/tag/<name>`**
 - returns all the images with the given tag
+
 **`/search`**
 - searches Public posts with given parameters
 
