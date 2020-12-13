@@ -10,4 +10,5 @@ jobs:
     - name: Docker compose with Unit Tests
       run: |
         export SECRET_KEY="${{ secrets.SECRET_KEY }}" 
-        docker-compose run web python3 manage.py test
+        docker-compose run api python3 manage.py test
+
