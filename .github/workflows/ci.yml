@@ -9,9 +9,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Docker Compose
       run: |
-        export SECRET_KEY="${{ secrets.SECRET_KEY }}" 
+        export SECRET_KEY="${{ secrets.SECRET_KEY }}"
         docker-compose up -d
     - name: Django Unit Tests
       run: |
-        docker run -e SECRET_KEY=$SECRET_KEY img_api python3 manage.py test
+        docker run -e SECRET_KEY="${{ secrets.SECRET_KEY }}" img_api python3 manage.py test
 
