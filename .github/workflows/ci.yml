@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Docker compose
+    - name: Docker Compose
       run: |
         export SECRET_KEY="${{ secrets.SECRET_KEY }}" 
-        docker-compose up
+        docker-compose up -d
     - name: Django Unit Tests
       run: |
         docker run -e SECRET_KEY=$SECRET_KEY img_api python3 manage.py test
