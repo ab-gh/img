@@ -23,6 +23,7 @@ class Image(models.Model):
     title = models.CharField(max_length=40)
     content = models.CharField(max_length=280)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
+    timestamp = models.DateTimeField(auto_now_add=True)
     image = models.BinaryField(blank=True)
 
     class Meta:
@@ -33,7 +34,7 @@ class Image(models.Model):
             "id": self.id,
             "title": self.title,
             "content": self.content,
-            "user": self.user,
+            "user": self.user.serialize(),
         }
 
     def __str__(self):
