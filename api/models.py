@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import base64
 
 # Create your models here.
 
@@ -24,7 +25,8 @@ class Image(models.Model):
     content = models.CharField(max_length=280)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
     timestamp = models.DateTimeField(auto_now_add=True)
-    image = models.BinaryField(blank=True)
+    image = models.TextField(blank=False)
+    mime = models.CharField(max_length=127, blank=True)
 
     class Meta:
         ordering = ['-timestamp',]
@@ -34,7 +36,8 @@ class Image(models.Model):
             "id": self.id,
             "title": self.title,
             "content": self.content,
-            "image": self.image.decode(),
+            "image": self.image,
+            "mime": self.mime,
             "user": self.user.serialize()
         }
 
