@@ -11,12 +11,6 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "username": self.username
-        }
-
 class Image(models.Model):
     """
     An image
@@ -30,16 +24,6 @@ class Image(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "content": self.content,
-            "image": self.image,
-            "mime": self.mime,
-            "user": self.user.serialize()
-        }
 
     def __str__(self):
         return f"{self.title}"
