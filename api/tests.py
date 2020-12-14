@@ -37,9 +37,8 @@ class ApiTestCase(TestCase, Client):
         c = Client()
 
         ## /api/image response codes
-
         ## get image: OK
-        #self.assertEqual(c.get(f"/api/image/{self.test['image_id']}").status_code, 200)
+        self.assertEqual(c.get(f"/api/image/{self.test['image_id']}").status_code, 200)
         ## post, put, patch, image: MethodNotAllowed
         self.assertEqual(c.post(f"/api/image/{self.test['image_id']}").status_code, 405)
         self.assertEqual(c.put(f"/api/image/{self.test['image_id']}").status_code, 405)
@@ -58,7 +57,7 @@ class ApiTestCase(TestCase, Client):
         response = c.get(f"/api/image/{self.test['image_id']}")
         data = json.loads(response.content)
         decoded = open("api/tests/decode.jpg", "rb").read()
-        
+
         self.assertEqual(data['title'], self.test['title'])
         self.assertEqual(data['content'], self.test['content'])
         self.assertEqual(base64.b64decode(data['image'].split(",")[1]), decoded)
