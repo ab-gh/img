@@ -1,11 +1,8 @@
 from django.test import Client, TestCase
-from django import django.core.serializers.json.DjangoJSONEncoder
+from .models import User, Image
 import json
 import base64
 import magic
-
-from .models import User, Image
-
 
 
 # Create your tests here.
@@ -24,9 +21,10 @@ class ApiTestCase(TestCase, Client):
         mime = magic.Magic(mime=True)
         self.test['mime'] = mime.from_file(encoded.name)
         self.test['image'] = f"data:{self.test['mime']};base64,{base64.b64encode(encoded.read()).decode('utf-8')}"
+
         ## Create test objects
         user = User.objects.create(username=self.test['username'])
-        image = Image.objects.create(title=self.test['title'], content=self.test['content'], image=self.test['image'], user=user)
+        image = Image.objects.create(title=self.test['title'], content=self.test['content'], image=self.test['image'], mime=self.test['mime'], user=user)
 
         ## Assign object IDs (should all be 1)
         self.test['user'] = user.id
@@ -60,12 +58,12 @@ class ApiTestCase(TestCase, Client):
         response = c.get(f"/api/image/{self.test['image_id']}")
         data = json.loads(response.content)
         decoded = open("api/tests/decode.jpg", "rb").read()
-
+        
         self.assertEqual(data['title'], self.test['title'])
         self.assertEqual(data['content'], self.test['content'])
         self.assertEqual(base64.b64decode(data['image'].split(",")[1]), decoded)
         self.assertEqual(data['image'].split(",")[0], f"data:{self.test['mime']};base64")
-        #self.assertEqual(data['user']['id'], self.test['user'])
+        self.assertEqual(data['user']['id'], self.test['user'])
         self.assertEqual(data['user']['username'], self.test['username'])
         
 

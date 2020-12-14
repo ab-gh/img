@@ -8,10 +8,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    #user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Image
-        #fields = ['id', 'title', 'content', 'user', 'timestamp', 'image', 'mime']
-        fields = ['id', 'title', 'content', 'timestamp', 'image', 'mime']
+        fields = ['id', 'title', 'content', 'user', 'timestamp', 'image', 'mime']
 
