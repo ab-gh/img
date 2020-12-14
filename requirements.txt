@@ -3,3 +3,5 @@ psycopg2
 wheel
 python-magic
 djangorestframework
+pyyaml
+uritemplate

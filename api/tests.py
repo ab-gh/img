@@ -38,13 +38,13 @@ class ApiTestCase(TestCase, Client):
 
         ## /api/image response codes
         ## get image: OK
-        self.assertEqual(c.get(f"/api/image/{self.test['image_id']}").status_code, 200)
+        self.assertEqual(c.get(f"/api/images/{self.test['image_id']}").status_code, 200)
         ## post, put, patch, image: MethodNotAllowed
-        self.assertEqual(c.post(f"/api/image/{self.test['image_id']}").status_code, 405)
-        self.assertEqual(c.put(f"/api/image/{self.test['image_id']}").status_code, 405)
-        self.assertEqual(c.patch(f"/api/image/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.post(f"/api/images/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.put(f"/api/images/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.patch(f"/api/images/{self.test['image_id']}").status_code, 405)
         ## get image-1: NotFound
-        self.assertEqual(c.get(f"/api/image/{self.test['image_id']-1}").status_code, 404)
+        self.assertEqual(c.get(f"/api/images/{self.test['image_id']-1}").status_code, 404)
         
 
     def test_image(self):
@@ -54,7 +54,7 @@ class ApiTestCase(TestCase, Client):
         c = Client()
 
         ## get image
-        response = c.get(f"/api/image/{self.test['image_id']}")
+        response = c.get(f"/api/images/{self.test['image_id']}")
         data = json.loads(response.content)
         decoded = open("api/tests/decode.jpg", "rb").read()
 
