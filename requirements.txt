@@ -1,3 +1,5 @@
 Django
 psycopg2
 wheel
+base64
+magic
