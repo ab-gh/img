@@ -15,10 +15,11 @@ jobs:
     - name: Upload Complied CSS
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: Compiled-CSS
+        name: styles.css
         path: web/static/web
     - name: Docker Compose
       run: |
+        ls web/static/web
         export SECRET_KEY="${{ secrets.SECRET_KEY }}"
         docker-compose up -d
     - name: Django Unit Tests
