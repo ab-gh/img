@@ -6,6 +6,7 @@ jobs:
     name: Docker Compose and Django Tests
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Compile CSS from SCSS files
       uses: gha-utilities/sass-build@v0.3.1
       with:
@@ -16,7 +17,6 @@ jobs:
       with:
         name: Compiled-CSS
         path: web/static/web
-    - uses: actions/checkout@v2
     - name: Docker Compose
       run: |
         export SECRET_KEY="${{ secrets.SECRET_KEY }}"
