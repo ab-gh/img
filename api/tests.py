@@ -3,7 +3,14 @@ from .models import User, Image
 import json
 import base64
 import magic
+import os
+import pathlib
+import unittest
 
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import requests
 
 # Create your tests here.
 
@@ -38,13 +45,13 @@ class ApiTestCase(TestCase, Client):
 
         ## /api/image response codes
         ## get image: OK
-        self.assertEqual(c.get(f"/api/image/{self.test['image_id']}").status_code, 200)
+        self.assertEqual(c.get(f"/api/images/{self.test['image_id']}").status_code, 200)
         ## post, put, patch, image: MethodNotAllowed
-        self.assertEqual(c.post(f"/api/image/{self.test['image_id']}").status_code, 405)
-        self.assertEqual(c.put(f"/api/image/{self.test['image_id']}").status_code, 405)
-        self.assertEqual(c.patch(f"/api/image/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.post(f"/api/images/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.put(f"/api/images/{self.test['image_id']}").status_code, 405)
+        self.assertEqual(c.patch(f"/api/images/{self.test['image_id']}").status_code, 405)
         ## get image-1: NotFound
-        self.assertEqual(c.get(f"/api/image/{self.test['image_id']-1}").status_code, 404)
+        self.assertEqual(c.get(f"/api/images/{self.test['image_id']-1}").status_code, 404)
         
 
     def test_image(self):
@@ -54,10 +61,9 @@ class ApiTestCase(TestCase, Client):
         c = Client()
 
         ## get image
-        response = c.get(f"/api/image/{self.test['image_id']}")
+        response = c.get(f"/api/images/{self.test['image_id']}")
         data = json.loads(response.content)
         decoded = open("api/tests/decode.jpg", "rb").read()
-
         self.assertEqual(data['title'], self.test['title'])
         self.assertEqual(data['content'], self.test['content'])
         self.assertEqual(base64.b64decode(data['image'].split(",")[1]), decoded)

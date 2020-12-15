@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>img</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="{% static 'web/scripts.js' %}" type="text/babel"></script>
+    <link href="{% static 'web/styles.css' %}" rel="stylesheet">
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+
+        <nav class="level">
+            <p class="level-item has-text-centered">
+              <a class="link is-info">Users</a>
+            </p>
+            <p class="level-item has-text-centered">
+              <a class="link is-info">Tags</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link is-info logo">img</a>
+            </p>
+            <p class="level-item has-text-centered">
+              <a class="link is-info">Collections</a>
+            </p>
+            <p class="level-item has-text-centered">
+              <a class="link is-info">Log In</a>
+            </p>
+        </nav>
+      
+        {% block body %}
+        {% endblock %}
+
+    </div>
+  </section>
+  </body>
+</html>

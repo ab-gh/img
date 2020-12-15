@@ -1,0 +1,28 @@
+{
+  "name": "img",
+  "version": "1.0.0",
+  "description": "## what this project is",
+  "main": "scripts.js",
+  "scripts": {
+    "css-build": "node-sass --omit-source-map-url web/static/web/styles.scss web/static/web/styles.css",
+    "css-watch": "npm run css-build -- --watch",
+    "start": "npm run css-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aejb/img.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aejb/img/issues"
+  },
+  "homepage": "https://github.com/aejb/img#readme",
+  "devDependencies": {
+    "bulma": "^0.9.1",
+    "node-sass": "^5.0.0"
+  },
+  "dependencies": {
+    "luxon": "^1.25.0"
+  }
+}
