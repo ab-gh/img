@@ -12,10 +12,10 @@ jobs:
         source: web/static/web/styles.scss
         destination: web/static/web/styles.css
     - name: Upload Complied CSS
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: Compiled-CSS
-          path: web/static/web
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: Compiled-CSS
+        path: web/static/web
     - uses: actions/checkout@v2
     - name: Docker Compose
       run: |
