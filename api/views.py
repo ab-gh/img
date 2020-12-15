@@ -12,16 +12,29 @@ from rest_framework.views import APIView
 from rest_framework import status
 import json
 
+from django_filters.rest_framework.filterset import FilterSet
+import coreapi
 
 from .serializers import ImageSerializer, UserSerializer
 from .models import User, Image
 
 # Create your views here.
 
-class ImageList(APIView):
+class ImageFilter(FilterSet):
+
+    class Meta(object):
+        models = Image
+        fields = (
+            'id', 'title', 'content', 'user', 'timestamp', 'image', 'mime',)
+
+class ImageList(generics.ListCreateAPIView):
     """
     Lists all images
     """
+    model = Image
+    serializer_class = ImageSerializer
+    filter_class = ImageFilter
+
     def get(self, request, format=None):
         images = Image.objects.all()
         serializer = ImageSerializer(images, many=True)
@@ -33,10 +46,14 @@ class ImageList(APIView):
             serializer.save()
             return Response(serializer.data, status=HTTP_201_CREATED)
 
-class ImageDetail(APIView):
+class ImageDetail(generics.RetrieveAPIView):
     """
     Retrieve an image
     """
+    model = Image
+    serializer_class = ImageSerializer
+    filter_class = ImageFilter
+    
     def get_image(self, pk):
         try:
             return Image.objects.get(pk=pk)
@@ -47,21 +64,5 @@ class ImageDetail(APIView):
         image = self.get_image(pk)
         serializer = ImageSerializer(image)
         return Response(serializer.data)
-
-# @csrf_exempt
-# def image(request, image_id):
-#     """
-#     Returns an image from a given image id
-#     """
-#     if request.method == "GET":
-#         try:
-#             image = Image.objects.get(pk=image_id)
-#             serializer = ImageSerializer(image)
-#         except Image.DoesNotExist:
-#             return JsonResponse({"error": "Image not found."}, status=404)
-#         else:
-#             return JsonResponse(serializer.data)
-#     else:
-#         return HttpResponseNotAllowed("")
 
     
