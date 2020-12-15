@@ -9,6 +9,7 @@ from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 import json
 
 
@@ -25,6 +26,12 @@ class ImageList(APIView):
         images = Image.objects.all()
         serializer = ImageSerializer(images, many=True)
         return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
 
 class ImageDetail(APIView):
     """

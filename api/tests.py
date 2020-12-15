@@ -57,7 +57,6 @@ class ApiTestCase(TestCase, Client):
         response = c.get(f"/api/images/{self.test['image_id']}")
         data = json.loads(response.content)
         decoded = open("api/tests/decode.jpg", "rb").read()
-
         self.assertEqual(data['title'], self.test['title'])
         self.assertEqual(data['content'], self.test['content'])
         self.assertEqual(base64.b64decode(data['image'].split(",")[1]), decoded)
