@@ -26,6 +26,5 @@ urlpatterns = [
         description="https://github.com/aejb/img",
         version="1.0.0"
     ), name='openapi-schema'),
-
     
 ]

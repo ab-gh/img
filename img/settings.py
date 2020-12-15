@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'web',
+    'rest_framework_swagger',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
