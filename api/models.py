@@ -11,6 +11,16 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
 
+class Tag(models.Model):
+    """
+    A tag, which images can have multiple of
+    """
+    name = models.CharField(max_length=40, unique=True)
+    
+    def __str__(self):
+        return f"{self.name}"
+    
+
 class Image(models.Model):
     """
     An image
@@ -21,11 +31,13 @@ class Image(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.TextField(blank=False)
     mime = models.CharField(max_length=127, blank=True)
+    tags = models.ManyToManyField(Tag, related_name="images", null=True, blank=True)
 
     class Meta:
         ordering = ['-timestamp',]
 
     def __str__(self):
         return f"{self.title}"
-    
+
+
     

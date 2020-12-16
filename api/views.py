@@ -15,8 +15,8 @@ import json
 from django_filters.rest_framework.filterset import FilterSet
 import coreapi
 
-from .serializers import ImageSerializer, UserSerializer
-from .models import User, Image
+from .serializers import ImageSerializer, UserSerializer, TagSerializer
+from .models import User, Image, Tag
 
 # Create your views here.
 
@@ -25,7 +25,15 @@ class ImageFilter(FilterSet):
     class Meta(object):
         models = Image
         fields = (
-            'id', 'title', 'content', 'user', 'timestamp', 'image', 'mime',)
+            'id', 'title', 'content', 'user', 'timestamp', 'image', 'mime', 'tags',)
+
+class TagFilter(FilterSet):
+
+    class Meta(object):
+        models = Tag
+        fields = (
+            'id', 'name',
+        )
 
 class ImageList(generics.ListCreateAPIView):
     """
@@ -34,6 +42,7 @@ class ImageList(generics.ListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     filter_class = ImageFilter
+    queryset = Image.objects.all()
 
     def get(self, request, format=None):
         images = Image.objects.all()
@@ -44,7 +53,7 @@ class ImageList(generics.ListCreateAPIView):
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ImageDetail(generics.RetrieveAPIView):
     """
@@ -53,6 +62,7 @@ class ImageDetail(generics.RetrieveAPIView):
     model = Image
     serializer_class = ImageSerializer
     filter_class = ImageFilter
+    queryset = Image.objects.all()
     
     def get_image(self, pk):
         try:
@@ -65,4 +75,25 @@ class ImageDetail(generics.RetrieveAPIView):
         serializer = ImageSerializer(image)
         return Response(serializer.data)
 
-    
+class TagList(generics.ListCreateAPIView):
+    """
+    Lists all tags
+    """
+    model = Tag
+    serializer_class = TagSerializer
+    filter_class = TagFilter
+    queryset = Tag.objects.all()
+
+    def get(self, request, format=None):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TagSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
