@@ -66,10 +66,11 @@ class Image extends React.Component {
             content: this.props.image.content,
             image: this.props.image.image,
             user: this.props.image.user,
+            tags: this.props.image.tags,
             timestamp: new Date(this.props.image.timestamp)
         }
     };
-    render () {
+    render() {
         return(
             <div className="tile is-parent">
                 <div class="card">
@@ -90,11 +91,12 @@ class Image extends React.Component {
                         <p class="subtitle is-6">@{this.state.user.username}</p>
                     </div>
                     </div>
-
                     <div class="content">
                     {this.state.content}
                     <br />
                     {this.state.timestamp.toLocaleString()}
+                    <br />
+                    <Tags tags={this.state.tags} />
                     </div>
                 </div>
                 </div>
@@ -103,4 +105,31 @@ class Image extends React.Component {
     }
 }
 
+class Tags extends React.Component {
+    render () {
+        let feed = [];
+        for (let i = 0; i < this.props.tags.length; i++) {
+            feed.push(<Tag key={i} tag={this.props.tags[i]} />)
+        }
+        return(<div className="pt-2 tags" >{feed}</div>)
+    }
+}
+
+class Tag extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log('tag')
+        this.state = {
+            name: this.props.tag.name,
+            id: this.props.tag.id
+        }
+    };
+    render() {
+        return(
+            <span className="tag">
+                {this.state.name}
+            </span>
+        )
+    }
+}
 run_view();
