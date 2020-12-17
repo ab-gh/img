@@ -1,8 +1,18 @@
 console.log('js')
 
-function run_view() {
-    console.log('rv');
-    ReactDOM.render(<ImagesLoader/>, document.querySelector('#images'))
+document.querySelector('#home-btn').addEventListener('click', () => view_home());
+
+function view_home() {
+    console.log('home');
+    document.querySelector('#home').style.display = 'block';
+    document.querySelector('#detail').style.display = 'none';
+    ReactDOM.render(<ImagesLoader/>, document.querySelector('#home'))
+}
+function image_detail(id) {
+    console.log(id)
+    document.querySelector('#home').style.display = 'none';
+    document.querySelector('#detail').style.display = 'block';
+    ReactDOM.render(<ImageDetail id={id}/>, document.querySelector('#detail'))
 }
 
 class ImagesLoader extends React.Component {
@@ -37,6 +47,38 @@ class ImagesLoader extends React.Component {
     }
 };
 
+class ImageDetail extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log(this.state);
+        this.state = {
+            image: {},
+            isDataFetched: false
+        };
+        this.fetchImage(this.props.id)
+    };
+    fetchImage(id) {
+        fetch(`api/images/${id}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(result => {
+            this.setState({
+                image: result,
+                isDataFetched: true
+            })
+        })
+    };
+    render() {
+        if(!this.state.isDataFetched) return null;
+        return(
+            <div>
+                <Image image={this.state.image}/>
+            </div>
+        )
+    }
+}
+
 class Images extends React.Component {
     render() {
         let feed = [];
@@ -62,44 +104,50 @@ class Image extends React.Component {
         console.log("props");
         console.log(props);
         this.state = {
+            id: this.props.image.id,
             title: this.props.image.title,
             content: this.props.image.content,
             image: this.props.image.image,
             user: this.props.image.user,
             tags: this.props.image.tags,
             timestamp: new Date(this.props.image.timestamp)
-        }
+        };
+        console.log(this.state.id)
+    };
+    detail = () => {
+        console.log("detail");
+        image_detail(this.state.id);
     };
     render() {
         return(
             <div className="tile is-parent">
-                <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src={this.state.image}/>
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-48x48">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                <a className="card" onClick={this.detail}>
+                    <div className="card-image">
+                        <figure className="image is-4by3">
+                            <img src={this.state.image}/>
                         </figure>
                     </div>
-                    <div class="media-content">
-                        <p class="title is-4">{this.state.title}</p>
-                        <p class="subtitle is-6">@{this.state.user.username}</p>
+                    <div className="card-content">
+                        <div className="media">
+                        <div className="media-left">
+                            <figure className="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                            </figure>
+                        </div>
+                        <div className="media-content">
+                            <p className="title is-4">{this.state.title}</p>
+                            <p className="subtitle is-6">@{this.state.user.username}</p>
+                        </div>
+                        </div>
+                        <div className="content">
+                        {this.state.content}
+                        <br />
+                        {this.state.timestamp.toLocaleString()}
+                        <br />
+                        <Tags tags={this.state.tags} />
+                        </div>
                     </div>
-                    </div>
-                    <div class="content">
-                    {this.state.content}
-                    <br />
-                    {this.state.timestamp.toLocaleString()}
-                    <br />
-                    <Tags tags={this.state.tags} />
-                    </div>
-                </div>
-                </div>
+                </a>
             </div>
         )
     }
@@ -132,4 +180,4 @@ class Tag extends React.Component {
         )
     }
 }
-run_view();
+view_home();
