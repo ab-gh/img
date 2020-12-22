@@ -105,6 +105,7 @@ class TagDetail(generics.RetrieveAPIView):
     model = Tag
     serializer_class = TagSerializer
     filter_class = TagFilter
+    queryset = Tag.objects.all()
 
     def get_tag(self, pk):
         try:

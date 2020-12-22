@@ -8,3 +8,4 @@ uritemplate
 selenium
 coreapi
 django-filter
+drf-yasg
