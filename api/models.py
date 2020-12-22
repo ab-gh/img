@@ -31,7 +31,7 @@ class Image(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.TextField(blank=False)
     mime = models.CharField(max_length=127, blank=True)
-    tags = models.ManyToManyField(Tag, related_name="images", null=True, blank=True)
+    tags = models.ManyToManyField(Tag, related_name="images", blank=False)
 
     class Meta:
         ordering = ['-timestamp',]

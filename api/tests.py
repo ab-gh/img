@@ -1,5 +1,5 @@
 from django.test import Client, TestCase
-from .models import User, Image
+from .models import User, Image, Tag
 import json
 import base64
 import magic
@@ -28,14 +28,19 @@ class ApiTestCase(TestCase, Client):
         mime = magic.Magic(mime=True)
         self.test['mime'] = mime.from_file(encoded.name)
         self.test['image'] = f"data:{self.test['mime']};base64,{base64.b64encode(encoded.read()).decode('utf-8')}"
+        self.test['tag'] = "testTag"
 
         ## Create test objects
+        tag = Tag.objects.create(name=self.test['tag'])
         user = User.objects.create(username=self.test['username'])
         image = Image.objects.create(title=self.test['title'], content=self.test['content'], image=self.test['image'], mime=self.test['mime'], user=user)
+        
+        tag.images.add(image)
 
         ## Assign object IDs (should all be 1)
         self.test['user'] = user.id
         self.test['image_id'] = image.id
+        self.test['tag_id'] = tag.id
 
     def test_api(self):
         """
@@ -70,7 +75,23 @@ class ApiTestCase(TestCase, Client):
         self.assertEqual(data['image'].split(",")[0], f"data:{self.test['mime']};base64")
         self.assertEqual(data['user']['id'], self.test['user'])
         self.assertEqual(data['user']['username'], self.test['username'])
-        
+
+    def test_tag(self):
+        """
+        Test Tag model
+        """
+        c = Client()
+
+        ##get tag
+        response = c.get(f"/api/tags/{self.test['tag_id']}")
+        data = json.loads(response.content)
+        ## check /api/tags/<tag>
+        self.assertEqual(data['name'], self.test['tag'])
+        self.assertEqual(data['id'], self.test['tag_id'])
+        ## check /api/tags/<tag>/images
+        response = c.get(f"/api/tags/{self.test['tag_id']}/images")
+        data = json.loads(response.content)[0]
+        self.assertEqual(data['id'], self.test['image_id'])
 
 
         

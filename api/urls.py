@@ -7,6 +7,8 @@ urlpatterns = [
     path('images/', views.ImageList.as_view()),
     path('images/<int:pk>', views.ImageDetail.as_view()),
     path('tags/', views.TagList.as_view()),
+    path('tags/<int:pk>', views.TagDetail.as_view()),
+    path('tags/<int:pk>/images', views.TagImages.as_view()),
     path('', TemplateView.as_view(
         template_name='swagger-ui.html',
         extra_context={'schema_url':'openapi-schema'}

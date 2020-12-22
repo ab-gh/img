@@ -19,3 +19,7 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['id', 'title', 'content', 'user', 'timestamp', 'image', 'mime', 'tags']
 
+class TagDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'images']

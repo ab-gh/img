@@ -7,7 +7,13 @@ from .models import User, Image, Tag
 class ImageAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "content", "user", "image")
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'images')
 
-admin.site.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'username')
+
+
+admin.site.register(User, UserAdmin)
 admin.site.register(Image, ImageAdmin)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)

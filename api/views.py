@@ -15,7 +15,7 @@ import json
 from django_filters.rest_framework.filterset import FilterSet
 import coreapi
 
-from .serializers import ImageSerializer, UserSerializer, TagSerializer
+from .serializers import ImageSerializer, UserSerializer, TagSerializer, TagDetailSerializer
 from .models import User, Image, Tag
 
 # Create your views here.
@@ -75,7 +75,7 @@ class ImageDetail(generics.RetrieveAPIView):
         serializer = ImageSerializer(image)
         return Response(serializer.data)
 
-class TagList(generics.ListCreateAPIView):
+class TagList(generics.ListAPIView):
     """
     Lists all tags
     """
@@ -97,3 +97,42 @@ class TagList(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class TagDetail(generics.RetrieveAPIView):
+    """
+    Returns information about the specified tag
+    """
+    model = Tag
+    serializer_class = TagSerializer
+    filter_class = TagFilter
+
+    def get_tag(self, pk):
+        try:
+            return Tag.objects.get(pk=pk)
+        except Tag.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        tag = self.get_tag(pk)
+        serializer = TagSerializer(tag)
+        return Response(serializer.data)
+
+class TagImages(generics.ListAPIView):
+    """
+    Returns images that have the specified tag
+    """
+    model = Tag
+    serializer_class = ImageSerializer
+    filter_class = ImageFilter
+    queryset = Image.objects.all()
+
+    def get_images(self, pk):
+        try:
+            return Tag.objects.get(pk=pk).images.all()
+        except Tag.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        images = self.get_images(pk)
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
