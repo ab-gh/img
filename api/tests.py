@@ -82,7 +82,7 @@ class ApiTestCase(TestCase, Client):
         """
         c = Client()
 
-        ##get tag
+        ## get tag
         response = c.get(f"/api/tags/{self.test['tag_id']}")
         data = json.loads(response.content)
         ## check /api/tags/<tag>
@@ -90,6 +90,23 @@ class ApiTestCase(TestCase, Client):
         self.assertEqual(data['id'], self.test['tag_id'])
         ## check /api/tags/<tag>/images
         response = c.get(f"/api/tags/{self.test['tag_id']}/images")
+        data = json.loads(response.content)[0]
+        self.assertEqual(data['id'], self.test['image_id'])
+
+    def test_user(self):
+        """
+        Test User model
+        """
+        c = Client()
+
+        ##get user
+        response = c.get(f"/api/users/{self.test['user']}")
+        data = json.loads(response.content)
+        ## check /api/users/<user>
+        self.assertEqual(data['id'], self.test['user'])
+        self.assertEqual(data['username'], self.test['username'])
+        ## check /api/users/<user>/images
+        response = c.get(f"/api/users/{self.test['user']}/images")
         data = json.loads(response.content)[0]
         self.assertEqual(data['id'], self.test['image_id'])
 

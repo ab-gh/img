@@ -35,6 +35,15 @@ class TagFilter(FilterSet):
             'id', 'name',
         )
 
+class UserFilter(FilterSet):
+
+    class Meta(object):
+        models = User
+        fields = (
+            'id', 'username'
+        )
+
+
 class ImageList(generics.ListCreateAPIView):
     """
     Lists all images
@@ -131,6 +140,60 @@ class TagImages(generics.ListAPIView):
         try:
             return Tag.objects.get(pk=pk).images.all()
         except Tag.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        images = self.get_images(pk)
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
+
+class UserList(generics.ListAPIView):
+    """
+    Lists all users
+    """
+    model = User
+    serializer_class = UserSerializer
+    filter_class = UserFilter
+    queryset = User.objects.all()
+
+    def get(self, request, format=None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+class UserDetail(generics.RetrieveAPIView):
+    """
+    Returns information about the specified user
+    """
+    model = User
+    serializer_class = UserSerializer
+    filter_class = UserFilter
+    queryset = User.objects.all()
+
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class UserImages(generics.ListAPIView):
+    """
+    Returns images that belong to the specified user
+    """
+    model = User
+    serializer_class = ImageSerializer
+    filter_class = ImageFilter
+    queryset = Image.objects.all()
+
+    def get_images(self, pk):
+        try:
+            return User.objects.get(pk=pk).images.all()
+        except User.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
