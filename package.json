@@ -20,7 +20,7 @@
   "homepage": "https://github.com/aejb/img#readme",
   "devDependencies": {
     "bulma": "^0.9.1",
-    "node-sass": "^5.0.0"
+    "node-sass": "^7.0.0"
   },
   "dependencies": {
     "luxon": "^1.25.0"
